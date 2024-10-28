@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum CactusState
+public enum BasicMonsterState
 {
     Idle, Walk, Attack, TakeHit, Die
 }
 
-public class CactusMonster : Monster,IInteractable
+public enum MonsterType
+{
+    Cactus, Mushroom
+}
+
+public class BasicMonster : Monster,IInteractable
 {
     [SerializeField] private float hp;
     public float Hp
@@ -19,14 +24,16 @@ public class CactusMonster : Monster,IInteractable
             hp = value; 
             if(hp <= 0)
             {
-                ChangerState(CactusState.Die);
+                ChangerState(BasicMonsterState.Die);
             }
         }
     }
 
-    public CactusState cactusState;
-    private StateMachine<CactusState, CactusMonster> stateMachine = new StateMachine<CactusState, CactusMonster>();
+    public BasicMonsterState basicMonsterState;
+    public MonsterType monsterType;
+    private StateMachine<BasicMonsterState, BasicMonster> stateMachine = new StateMachine<BasicMonsterState, BasicMonster>();
     public SkinnedMeshRenderer meshRenderer;
+    public ParticleSystem dieParticle;
 
     private void Awake()
     {
@@ -34,11 +41,11 @@ public class CactusMonster : Monster,IInteractable
         viewDetector = GetComponent<ViewDetector>();
         rigid = GetComponent<Rigidbody>();
         stateMachine.Reset(this);
-        stateMachine.AddState(CactusState.Idle, new CactusStates.CactusIdle());
-        stateMachine.AddState(CactusState.Attack, new CactusStates.CactusAttack());
-        stateMachine.AddState(CactusState.TakeHit, new CactusStates.CactusTakeHit());
-        stateMachine.AddState(CactusState.Die, new CactusStates.CactusDie());
-        ChangerState(CactusState.Idle);
+        stateMachine.AddState(BasicMonsterState.Idle, new BasicStates.BasicMonsterIdle());
+        stateMachine.AddState(BasicMonsterState.Attack, new BasicStates.BasicMonsterAttack());
+        stateMachine.AddState(BasicMonsterState.TakeHit, new BasicStates.BasicMonsterTakeHit());
+        stateMachine.AddState(BasicMonsterState.Die, new BasicStates.BasicMonsterDie());
+        ChangerState(BasicMonsterState.Idle);
     }
 
     private void Start()
@@ -59,9 +66,9 @@ public class CactusMonster : Monster,IInteractable
         }
     }
 
-    public void ChangerState(CactusState state)
+    public void ChangerState(BasicMonsterState state)
     {
-        cactusState = state;
+        basicMonsterState = state;
         stateMachine.ChangeState(state);
     }
 
@@ -70,7 +77,7 @@ public class CactusMonster : Monster,IInteractable
         Hp -= damage;
         if(Hp > 0)
         {
-            ChangerState(CactusState.TakeHit);
+            ChangerState(BasicMonsterState.TakeHit);
         }
     }
 }

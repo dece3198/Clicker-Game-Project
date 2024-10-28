@@ -26,8 +26,10 @@ public class PlayerController : MonoBehaviour, IInteractable
     private CharacterController characterController;
     private ViewDetector viewDetector;
     [SerializeField] private GameObject bullet;
+    [SerializeField] private GameObject explosion;
     [SerializeField] private Transform bulletPos;
     [SerializeField] private ParticleSystem bulletParticle;
+    [SerializeField] private GameObject bulletParent;
     private Stack<GameObject> bulletStack = new Stack<GameObject>();
     
     private Vector3 moveVec;
@@ -46,7 +48,9 @@ public class PlayerController : MonoBehaviour, IInteractable
     {
         for(int i = 0; i < 10; i++)
         {
-            GameObject _bullet = Instantiate(bullet);
+            GameObject _bullet = Instantiate(bullet, bulletParent.transform);
+            GameObject _explosion = Instantiate(explosion, bulletParent.transform);
+            _bullet.GetComponent<BasicBullet>().explosion = _explosion;
             bulletStack.Push(_bullet);
         }
     }
@@ -54,11 +58,7 @@ public class PlayerController : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if(isAtkCool)
-        {
-            PlayerMove();
-        }
-
+        PlayerMove();
         animator.SetBool("isMove", isMove);
 
         if(Input.GetButtonDown("Fire1"))
@@ -116,7 +116,10 @@ public class PlayerController : MonoBehaviour, IInteractable
         Vector3 RightVec = new Vector3(cam.transform.right.x, 0f, cam.transform.right.z);
 
         moveVec = moveInput.x * RightVec + moveInput.z * forwarVec;
-        transform.localRotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveVec), Time.deltaTime * rotateSpeed);
+        if(isAtkCool)
+        {
+            transform.localRotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveVec), Time.deltaTime * rotateSpeed);
+        }
         characterController.Move(moveVec * moveSpeed * Time.deltaTime);
     }
 
@@ -134,7 +137,7 @@ public class PlayerController : MonoBehaviour, IInteractable
     {
         isAtkCool = false;
         isMove = false;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
         isMove = true;
         isAtkCool = true;
     }

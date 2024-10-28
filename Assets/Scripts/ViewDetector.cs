@@ -13,92 +13,41 @@ public class ViewDetector : MonoBehaviour
 
     [SerializeField] private float radiu;
     [SerializeField] private float angle;
-    [SerializeField] private float rangeRadiu;
-    public float rangeAngle;
     [SerializeField] private float atkRadiu;
     [SerializeField] private float atkAngle;
     [SerializeField] private LayerMask layerMask;
-    [SerializeField] private LayerMask obstaclemask;
 
     public void FindTarget()
     {
         Collider[] targets = Physics.OverlapSphere(transform.position, radiu, layerMask);
+        float min = Mathf.Infinity;
 
-        for(int i = 0; i < targets.Length; i++)
+        foreach(Collider collider in targets)
         {
-            Vector3 findTarget = (targets[i].transform.position - transform.position).normalized;
-            if(Vector3.Dot(transform.forward,findTarget) < Mathf.Cos(angle * 0.5f * Mathf.Deg2Rad))
+            Vector3 findTarget = (collider.transform.position - transform.position).normalized;
+            if (Vector3.Dot(transform.forward, findTarget) < Mathf.Cos(angle * 0.5f * Mathf.Deg2Rad))
             {
                 continue;
             }
-            float findTargetRange = Vector3.Distance(transform.position, targets[i].transform.position);
-            if(Physics.Raycast(transform.position, findTarget,findTargetRange,obstaclemask))
-            {
-                continue;
-            }
-            Debug.DrawRay(transform.position, findTarget * findTargetRange, Color.red);
 
-            target = targets[i].gameObject;
-            return;
-        }
-        target = null;
-    }
+            float distance = Vector3.Distance(transform.position, collider.transform.position);
 
-    public void FindRangeTarget(float damage, float power)
-    {
-        Collider[] targets = Physics.OverlapSphere(transform.position, rangeRadiu, layerMask);
+            Debug.DrawRay(transform.position, findTarget * distance, Color.red);
 
-        for (int i = 0; i < targets.Length; i++)
-        {
-            Vector3 findTarget = (targets[i].transform.position - transform.position).normalized;
-            if (Vector3.Dot(transform.forward, findTarget) < Mathf.Cos(rangeAngle * 0.5f * Mathf.Deg2Rad))
+            if (distance < min)
             {
-                continue;
-            }
-            float findTargetRange = Vector3.Distance(transform.position, targets[i].transform.position);
-            if (Physics.Raycast(transform.position, findTarget, findTargetRange, obstaclemask))
-            {
-                continue;
-            }
-            Debug.DrawRay(transform.position, findTarget * findTargetRange, Color.red);
-
-            rangeTarget = targets[i].gameObject;
-            if(rangeTarget != null)
-            {
-                rangeTarget.GetComponent<IInteractable>()?.TakeHit(damage);
-                rangeTarget.GetComponent<Rigidbody>().AddForce((transform.forward + transform.up) * power, ForceMode.Impulse);
+                min = distance;
+                target = collider.gameObject;
             }
         }
-        rangeTarget = null;
-    }
 
-    public void FindQSkillTarget(float damage, float power)
-    {
-        Collider[] targets = Physics.OverlapSphere(transform.position, rangeRadiu, layerMask);
-
-        for (int i = 0; i < targets.Length; i++)
+        if(targets.Length <= 0)
         {
-            Vector3 findTarget = (targets[i].transform.position - transform.position).normalized;
-            if (Vector3.Dot(transform.forward, findTarget) < Mathf.Cos(rangeAngle * 0.5f * Mathf.Deg2Rad))
-            {
-                continue;
-            }
-            float findTargetRange = Vector3.Distance(transform.position, targets[i].transform.position);
-            if (Physics.Raycast(transform.position, findTarget, findTargetRange, obstaclemask))
-            {
-                continue;
-            }
-            Debug.DrawRay(transform.position, findTarget * findTargetRange, Color.red);
-
-            rangeTarget = targets[i].gameObject;
-            if (rangeTarget != null)
-            { 
-                rangeTarget.GetComponent<IInteractable>()?.TakeHit(damage);
-                rangeTarget.GetComponent<Rigidbody>().AddForce((transform.forward + transform.right) * power, ForceMode.Impulse);
-            }
+            target = null;
         }
-        rangeTarget = null;
+        
     }
+
 
     public void FindAttackTarget()
     {
@@ -112,10 +61,6 @@ public class ViewDetector : MonoBehaviour
                 continue;
             }
             float findTargetRange = Vector3.Distance(transform.position, targets[i].transform.position);
-            if (Physics.Raycast(transform.position, findTarget, findTargetRange, obstaclemask))
-            {
-                continue;
-            }
             Debug.DrawRay(transform.position, findTarget * findTargetRange, Color.red);
 
             atkTarget = targets[i].gameObject;
@@ -124,36 +69,11 @@ public class ViewDetector : MonoBehaviour
         atkTarget = null;
     }
 
-    public void FindPlayerTarget()
-    {
-        Collider[] targets = Physics.OverlapSphere(transform.position, rangeRadiu, layerMask);
-
-        for (int i = 0; i < targets.Length; i++)
-        {
-            Vector3 findTarget = (targets[i].transform.position - transform.position).normalized;
-            if (Vector3.Dot(transform.forward, findTarget) < Mathf.Cos(rangeAngle * 0.5f * Mathf.Deg2Rad))
-            {
-                continue;
-            }
-            float findTargetRange = Vector3.Distance(transform.position, targets[i].transform.position);
-            if (Physics.Raycast(transform.position, findTarget, findTargetRange, obstaclemask))
-            {
-                continue;
-            }
-            Debug.DrawRay(transform.position, findTarget * findTargetRange, Color.red);
-
-            rangeTarget = targets[i].gameObject;
-            return;
-        }
-        rangeTarget = null;
-    }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, radiu);
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, rangeRadiu);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, atkRadiu);
 
@@ -164,13 +84,6 @@ public class ViewDetector : MonoBehaviour
         Debug.DrawRay(transform.position, lookDir * radiu, Color.red);
         Debug.DrawRay(transform.position, rightDir * radiu, Color.red);
         Debug.DrawRay(transform.position, leftDir * radiu, Color.red);
-
-        Vector3 rangeRightDir = AngleToDir(transform.eulerAngles.y + rangeAngle * 0.5f);
-        Vector3 rangeLeftDir = AngleToDir(transform.eulerAngles.y - rangeAngle * 0.5f);
-
-        Debug.DrawRay(transform.position, lookDir * rangeRadiu, Color.green);
-        Debug.DrawRay(transform.position, rangeRightDir * rangeRadiu, Color.green);
-        Debug.DrawRay(transform.position, rangeLeftDir * rangeRadiu, Color.green);
 
         Vector3 atkRightDir = AngleToDir(transform.eulerAngles.y + atkAngle * 0.5f);
         Vector3 atkLeftDir = AngleToDir(transform.eulerAngles.y - atkAngle * 0.5f);

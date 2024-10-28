@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3887736686275594723}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_rightEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 113771849747796001}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_headDeco
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3020218833882595016}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_mouth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 263232502626635603}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_spine03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 168308490038025370}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_leftHandTip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2622473577321809841}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_leftHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 275226787840296240}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_leftUpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,7 +232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4036557030551903420}
   - component: {fileID: 7498861581505045573}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cactus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7588090257162535426}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,7 +366,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7003769379565030374}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_rightHandTip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -402,13 +402,13 @@ GameObject:
   - component: {fileID: 7219383286686504698}
   - component: {fileID: 5502986771009509530}
   - component: {fileID: 1032359899337968237}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cactus Monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3659091567338028346
 Transform:
   m_ObjectHideFlags: 0
@@ -424,6 +424,8 @@ Transform:
   m_Children:
   - {fileID: 4036557030551903420}
   - {fileID: 7588090257162535426}
+  - {fileID: 3654741333365008002}
+  - {fileID: 6043158087871296170}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &4989398257165671292
@@ -462,8 +464,14 @@ MonoBehaviour:
   viewDetector: {fileID: 0}
   animator: {fileID: 0}
   player: {fileID: 0}
+  headPos: {fileID: 3654741333365008002}
+  rigid: {fileID: 0}
   damage: 10
-  cactusState: 0
+  hp: 100
+  basicMonsterState: 0
+  monsterType: 0
+  meshRenderer: {fileID: 7498861581505045573}
+  dieParticle: {fileID: 5841861153953563758}
 --- !u!114 &7219383286686504698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,18 +487,13 @@ MonoBehaviour:
   target: {fileID: 0}
   rangeTarget: {fileID: 0}
   atkTarget: {fileID: 0}
-  radiu: 1
-  angle: 60
-  rangeRadiu: 0
-  rangeAngle: 0
-  atkRadiu: 0
-  atkAngle: 0
+  radiu: 10
+  angle: 360
+  atkRadiu: 1
+  atkAngle: 60
   layerMask:
     serializedVersion: 2
     m_Bits: 128
-  obstaclemask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!54 &5502986771009509530
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -550,7 +553,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3370291668262916381}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_rightHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -582,7 +585,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6997647540121257869}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_rightUpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -614,7 +617,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8101793955110984438}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -646,7 +649,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5418863610379332333}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_leftLowerArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -669,6 +672,37 @@ Transform:
   - {fileID: 2622473577321809841}
   m_Father: {fileID: 275226787840296240}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4463381366222993872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3654741333365008002}
+  m_Layer: 0
+  m_Name: HeadPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3654741333365008002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4463381366222993872}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.688, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3659091567338028346}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5949774926414927610
 GameObject:
   m_ObjectHideFlags: 0
@@ -678,7 +712,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3674520763106640087}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_rightLowerArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -710,7 +744,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7773743781962800872}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -745,7 +779,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4036162245671082636}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_spine02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,7 +811,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3628920830216619679}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_spine01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -809,7 +843,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 920581247123504997}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: cactus_leftEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -831,3 +865,154 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7773743781962800872}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &6040258002455631994
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3659091567338028346}
+    m_Modifications:
+    - target: {fileID: 1377424659350760, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Name
+      value: DeathAcid
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.545
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198022340871366082, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198060850190203280, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198108562312639678, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198156004514547826, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198193799746488344, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198348230405246366, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198415819560148932, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198428926585697702, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198466014394350090, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198505150952397844, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198555780831654826, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199006375265937718, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199133112103359506, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199207375685922820, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199354369509428574, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199420100810002200, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199483862168358136, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199539514548908258, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199752352709844852, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199860529081917972, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199868920871234956, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+--- !u!198 &5841861153953563758 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198505150952397844, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+  m_PrefabInstance: {fileID: 6040258002455631994}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6043158087871296170 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4172533902142160, guid: f1de78bcb509f9f4f81dd92becbf341c, type: 3}
+  m_PrefabInstance: {fileID: 6040258002455631994}
+  m_PrefabAsset: {fileID: 0}
