@@ -8,11 +8,6 @@ public enum BasicMonsterState
     Idle, Walk, Attack, TakeHit, Die
 }
 
-public enum MonsterType
-{
-    Cactus, Mushroom
-}
-
 public class BasicMonster : Monster,IInteractable
 {
     [SerializeField] private float hp;
@@ -24,13 +19,15 @@ public class BasicMonster : Monster,IInteractable
             hp = value; 
             if(hp <= 0)
             {
-                ChangerState(BasicMonsterState.Die);
+                if(basicMonsterState != BasicMonsterState.Die)
+                {
+                    ChangeState(BasicMonsterState.Die);
+                }
             }
         }
     }
 
     public BasicMonsterState basicMonsterState;
-    public MonsterType monsterType;
     private StateMachine<BasicMonsterState, BasicMonster> stateMachine = new StateMachine<BasicMonsterState, BasicMonster>();
     public SkinnedMeshRenderer meshRenderer;
     public ParticleSystem dieParticle;
@@ -45,12 +42,19 @@ public class BasicMonster : Monster,IInteractable
         stateMachine.AddState(BasicMonsterState.Attack, new BasicStates.BasicMonsterAttack());
         stateMachine.AddState(BasicMonsterState.TakeHit, new BasicStates.BasicMonsterTakeHit());
         stateMachine.AddState(BasicMonsterState.Die, new BasicStates.BasicMonsterDie());
-        ChangerState(BasicMonsterState.Idle);
+        ChangeState(BasicMonsterState.Idle);
+        maxHp = Hp;
+    }
+
+    private void OnEnable()
+    {
+        slider.value = Hp / maxHp;
     }
 
     private void Start()
     {
         player = GameManager.instance.player;
+        slider.value = Hp / maxHp;
     }
 
     private void Update()
@@ -60,13 +64,14 @@ public class BasicMonster : Monster,IInteractable
 
     public void PlayerAttack()
     {
-        if(viewDetector.Target != null)
+        if (viewDetector.Target != null)
         {
-            viewDetector.Target.GetComponent<IInteractable>()?.TakeHit(damage);
+            viewDetector.Target.GetComponent<IInteractable>().TakeHit(damage);
+            viewDetector.AtkTarget.GetComponent<Rigidbody>().AddForce(transform.forward * power, ForceMode.Impulse);
         }
     }
 
-    public void ChangerState(BasicMonsterState state)
+    public void ChangeState(BasicMonsterState state)
     {
         basicMonsterState = state;
         stateMachine.ChangeState(state);
@@ -75,9 +80,10 @@ public class BasicMonster : Monster,IInteractable
     public void TakeHit(float damage)
     {
         Hp -= damage;
-        if(Hp > 0)
+        slider.value = Hp / maxHp;
+        if (Hp > 0)
         {
-            ChangerState(BasicMonsterState.TakeHit);
+            ChangeState(BasicMonsterState.TakeHit);
         }
     }
 }

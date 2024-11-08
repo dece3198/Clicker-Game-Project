@@ -30,7 +30,7 @@ public class BasicBullet : MonoBehaviour
 
     private void Update()
     {
-        rigid.velocity = transform.forward * speed;
+        rigid.linearVelocity = transform.forward * speed;
     }
 
     private void OnTriggerEnter(Collider other)

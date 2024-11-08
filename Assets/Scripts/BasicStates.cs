@@ -10,7 +10,7 @@ namespace BasicStates
 
         public override void Enter(BasicMonster monster)
         {
-            monster.rigid.velocity = Vector3.zero;
+            monster.rigid.linearVelocity = Vector3.zero;
         }
 
         public override void Exit(BasicMonster monster)
@@ -31,7 +31,7 @@ namespace BasicStates
                 if ((monster.player.transform.position - monster.transform.position).magnitude > 1)
                 {
                     monster.animator.SetBool("Walk", true);
-                    monster.transform.position = Vector3.MoveTowards(monster.transform.position, monster.player.transform.position, 0.0075f);
+                    monster.transform.position = Vector3.MoveTowards(monster.transform.position, monster.player.transform.position, 2 * Time.deltaTime);
                 }
                 else
                 {
@@ -48,7 +48,7 @@ namespace BasicStates
                 if(isAtkCool)
                 {
                     monster.StartCoroutine(AtkCo());
-                    monster.ChangerState(BasicMonsterState.Attack);
+                    monster.ChangeState(BasicMonsterState.Attack);
                 }
             }
         }
@@ -77,7 +77,7 @@ namespace BasicStates
             monster.viewDetector.FindTarget();
             if (monster.animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
-                monster.ChangerState(BasicMonsterState.Idle);
+                monster.ChangeState(BasicMonsterState.Idle);
             }
         }
     }
@@ -105,7 +105,7 @@ namespace BasicStates
             monster.meshRenderer.material.color = Color.white;
             if(monster.Hp > 0)
             {
-                monster.ChangerState(BasicMonsterState.Idle);
+                monster.ChangeState(BasicMonsterState.Idle);
             }
         }
     }
@@ -118,6 +118,7 @@ namespace BasicStates
             monster.animator.Play("Die");
             monster.dieParticle.Play();
             monster.StartCoroutine(DieCo(monster));
+            monster.StartCoroutine(CoinCo(monster));
         }
 
         public override void Exit(BasicMonster monster)
@@ -132,6 +133,15 @@ namespace BasicStates
         {
             yield return new WaitForSeconds(1.5f);
             MonsterManager.instance.EnterPool(monster.gameObject);
+        }
+
+        private IEnumerator CoinCo(BasicMonster monster)
+        {
+            for(int i = 0; i < monster.coinCount; i++)
+            {
+                yield return new WaitForSeconds(0.1f);
+                CoinManager.instacne.ExitPool(monster.coinPos);
+            }
         }
     }
 

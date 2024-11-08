@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: Stage_1
   m_EditorClassIdentifier: 
   stages:
-  - monsterA: 0
-    monsterB: 1
+  - monster: 0000000001000000
     monsterCount: 5
+    stageType: 0
+  - monster: 04000000
+    monsterCount: 1
+    stageType: 1
+  - monster: 0200000003000000
+    monsterCount: 5
+    stageType: 0
   nextStage: {fileID: 11400000, guid: 67de648fa86f02546aeb5b59aa5a6e70, type: 2}

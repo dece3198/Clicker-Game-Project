@@ -6,17 +6,31 @@ public class MonsterManager : MonoBehaviour
 {
     public static MonsterManager instance;
     public GameObject[] monsters;
-    public List<GameObject> monsterList = new List<GameObject>();
+    private Stack<GameObject> muskrat = new Stack<GameObject>();
+    private Stack<GameObject> gecko =  new Stack<GameObject>();
+    private Stack<GameObject> cactus =  new Stack<GameObject>();
+    private Stack<GameObject> mushroom = new Stack<GameObject>();
+    private Stack<GameObject> mummy = new Stack<GameObject>();
+    private Dictionary<MonsterType, Stack<GameObject>> monsterDic = new Dictionary<MonsterType, Stack<GameObject>>();
 
     private void Awake()
     {
         instance = this;
+        monsterDic.Add(MonsterType.Muskrat, muskrat);
+        monsterDic.Add(MonsterType.Gecko, gecko);
+        monsterDic.Add(MonsterType.Cactus, cactus);
+        monsterDic.Add(MonsterType.Mushroom, mushroom);
+        monsterDic.Add(MonsterType.Mummy, mummy);
+    }
+
+    private void Start()
+    {
         for (int i = 0; i < monsters.Length; i++)
         {
             for (int j = 0; j < 10; j++)
             {
                 GameObject monster = Instantiate(monsters[i], transform);
-                monsterList.Add(monster);
+                monsterDic[monster.GetComponent<Monster>().monsterType].Push(monster);
             }
         }
     }
@@ -24,21 +38,14 @@ public class MonsterManager : MonoBehaviour
 
     public GameObject ExitPool(MonsterType monsterType)
     {
-        for (int i = 0; i < monsterList.Count; i++)
-        {
-            if (monsterList[i].GetComponent<BasicMonster>().monsterType == monsterType)
-            {
-                monsterList.RemoveAt(i);
-                return monsterList[i];
-            }
-        }
-        return null;
+        return monsterDic[monsterType].Pop();
     }
 
     public void EnterPool(GameObject monster)
     {
-        monsterList.Add(monster);
+        monsterDic[monster.GetComponent<Monster>().monsterType].Push(monster);
         monster.SetActive(false);
+        monster.GetComponent<BasicMonster>().Hp = monster.GetComponent<BasicMonster>().maxHp + (100 * StageManager.instance.stageCount);
         MapManager.instance.curCount++;
     }
 }

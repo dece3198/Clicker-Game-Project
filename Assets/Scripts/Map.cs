@@ -12,22 +12,18 @@ public class Map : MonoBehaviour
     {
         for (int i = 0; i < StageManager.instance.stage.stages[StageManager.instance.stageCount].monsterCount; i++)
         {
-            int rand = Random.Range(0, 100);
+            int rand = Random.Range(0, StageManager.instance.stage.stages[StageManager.instance.stageCount].monster.Length);
 
-            if (rand < 51)
+
+            GameObject monster = MonsterManager.instance.ExitPool(StageManager.instance.stage.stages[StageManager.instance.stageCount].monster[rand]);
+
+            switch(StageManager.instance.stage.stages[StageManager.instance.stageCount].stageType)
             {
-                GameObject monster = MonsterManager.instance.ExitPool(StageManager.instance.stage.stages[StageManager.instance.stageCount].monsterA);
-                monster.transform.position = monsterPos[i].position;
-                monster.SetActive(true);
-                monster.layer = 8;
+                case StageType.Basic : monster.transform.position = monsterPos[i].position; break;
+                case StageType.Boss: monster.transform.position = monsterPos[5].position; break;
             }
-            else
-            {
-                GameObject monster = MonsterManager.instance.ExitPool(StageManager.instance.stage.stages[StageManager.instance.stageCount].monsterB);
-                monster.transform.position = monsterPos[i].position;
-                monster.SetActive(true);
-                monster.layer = 8;
-            }
+            monster.SetActive(true);
+            monster.layer = 8;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class BaseState<T>
 {
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour, IInteractable
         set { hp = value; }
     }
 
+    public float maxHp;
     public float moveSpeed;
     public float rotateSpeed;
 
@@ -30,7 +32,9 @@ public class PlayerController : MonoBehaviour, IInteractable
     [SerializeField] private Transform bulletPos;
     [SerializeField] private ParticleSystem bulletParticle;
     [SerializeField] private GameObject bulletParent;
+    [SerializeField] private Slider hpSlider;
     private Stack<GameObject> bulletStack = new Stack<GameObject>();
+    public Transform coinPos;
     
     private Vector3 moveVec;
     public bool isMove;
@@ -42,6 +46,7 @@ public class PlayerController : MonoBehaviour, IInteractable
         viewDetector = GetComponent<ViewDetector>();
         characterController = GetComponent<CharacterController>();  
         cam = Camera.main;
+        maxHp = Hp;
     }
 
     private void Start()
@@ -58,20 +63,40 @@ public class PlayerController : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        PlayerMove();
+        //PlayerMove();
         animator.SetBool("isMove", isMove);
+        hpSlider.value = Hp / maxHp;
 
-        if(Input.GetButtonDown("Fire1"))
+
+        viewDetector.FindAutoTarget();
+        if(viewDetector.AutoTarget != null)
         {
-            if(isAtkCool)
+            if (viewDetector.Target == null)
             {
+                isMove = true;
+                transform.position = Vector3.MoveTowards(transform.position, viewDetector.AutoTarget.transform.position, moveSpeed * Time.deltaTime);
+                transform.LookAt(viewDetector.AutoTarget.transform);
                 viewDetector.FindTarget();
-                if (viewDetector.Target != null)
-                {
-                    StartCoroutine(AtkCo());
-                    animator.SetTrigger("AttackA");
-                    transform.LookAt(viewDetector.Target.transform.position);
-                }
+            }
+            else
+            {
+                isMove = false;
+                ClickAtkButton();
+            }
+            
+        }
+    }
+
+    public void ClickAtkButton()
+    {
+        if (isAtkCool)
+        {
+            viewDetector.FindTarget();
+            if (viewDetector.Target != null)
+            {
+                StartCoroutine(AtkCo());
+                animator.SetTrigger("AttackA");
+                transform.LookAt(viewDetector.Target.transform.position);
             }
         }
     }
@@ -96,6 +121,7 @@ public class PlayerController : MonoBehaviour, IInteractable
 
     private void PlayerMove()
     {
+
         Vector3 moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
         if (moveInput.magnitude > 0)
@@ -136,9 +162,7 @@ public class PlayerController : MonoBehaviour, IInteractable
     private IEnumerator AtkCo()
     {
         isAtkCool = false;
-        isMove = false;
-        yield return new WaitForSeconds(0.5f);
-        isMove = true;
+        yield return new WaitForSeconds(0.1f);
         isAtkCool = true;
     }
 }

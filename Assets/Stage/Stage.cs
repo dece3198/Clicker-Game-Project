@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum StageType
+{
+    Basic, Boss
+}
+
+
 [System.Serializable]
 public class Stages
 {
-    public MonsterType monsterA;
-    public MonsterType monsterB;
+    public MonsterType[] monster;
     public int monsterCount;
+    public StageType stageType;
 }
 
 [CreateAssetMenu(fileName = "New Stage", menuName = "New Stage/Stage")]
