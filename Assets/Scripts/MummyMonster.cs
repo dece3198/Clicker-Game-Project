@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ using UnityEngine;
 
 public enum MummyState
 {
-    Idle, Attack,Skill, Die
+    Idle, TakeHit, Attack, Skill, Die
 }
 
 public class MummyIdle : BaseState<MummyMonster>
@@ -35,7 +36,7 @@ public class MummyIdle : BaseState<MummyMonster>
             if ((monster.player.transform.position - monster.transform.position).magnitude > 1.5)
             {
                 monster.animator.SetBool("Walk", true);
-                monster.transform.position = Vector3.MoveTowards(monster.transform.position, monster.player.transform.position, 2 * Time.deltaTime);
+                monster.transform.position = Vector3.MoveTowards(monster.transform.position, monster.player.transform.position, 3 * Time.deltaTime);
             }
             else
             {
@@ -62,6 +63,40 @@ public class MummyIdle : BaseState<MummyMonster>
         isAtkCool = false;
         yield return new WaitForSeconds(3.5f);
         isAtkCool = true;
+    }
+}
+
+public class MummyTakeHit : BaseState<MummyMonster>
+{
+    public override void Enter(MummyMonster monster)
+    {
+        monster.animator.SetTrigger("TakeHit");
+        monster.StartCoroutine(TakeHitCo(monster));
+    }
+
+    public override void Exit(MummyMonster monster)
+    {
+    }
+
+    public override void Update(MummyMonster monster)
+    {
+    }
+
+    private IEnumerator TakeHitCo(MummyMonster monster)
+    {
+        for(int i = 0; i < monster.meshRenderer.Length; i++)
+        {
+            monster.meshRenderer[i].material.color = Color.red;
+        }
+        yield return new WaitForSeconds(0.5f);
+        for (int i = 0; i < monster.meshRenderer.Length; i++)
+        {
+            monster.meshRenderer[i].material.color = Color.white;
+        }
+        if (monster.Hp > 0)
+        {
+            monster.ChangeState(MummyState.Idle);
+        }
     }
 }
 
@@ -122,11 +157,10 @@ public class MummySkill : BaseState<MummyMonster>
         monster.skill.Play();
         monster.projectorObj.SetActive(false);
 
-        monster.viewDetector.FindSkillTarget();
+        monster.viewDetector.FindSkillTarget(monster.skillDamage);
         if(monster.viewDetector.SkillTarget != null)
         {
-            monster.viewDetector.SkillTarget.GetComponent<IInteractable>().TakeHit(monster.skillDamage);
-            monster.viewDetector.SkillTarget.GetComponent<Rigidbody>().AddForce(monster.transform.forward * 5, ForceMode.Impulse);
+            monster.viewDetector.SkillTarget.GetComponent<Rigidbody>().AddForce(monster.transform.forward * monster.power, ForceMode.Impulse);
         }
         monster.ChangeState(MummyState.Idle);
     }
@@ -136,8 +170,10 @@ public class MummyDie : BaseState<MummyMonster>
 {
     public override void Enter(MummyMonster monster)
     {
-        MapManager.instance.MapCount--;
-        StageManager.instance.stageCount++;
+        monster.gameObject.layer = 0;
+        monster.animator.Play("Die");
+        monster.StartCoroutine(DieCo(monster));
+        monster.StartCoroutine(CoinCo(monster));
     }
 
     public override void Exit(MummyMonster monster)
@@ -149,6 +185,21 @@ public class MummyDie : BaseState<MummyMonster>
     {
 
     }
+
+    private IEnumerator DieCo(MummyMonster monster)
+    {
+        yield return new WaitForSeconds(5f);
+        MonsterManager.instance.EnterPool(monster.gameObject);
+    }
+
+    private IEnumerator CoinCo(MummyMonster monster)
+    {
+        for (int i = 0; i < monster.coinCount; i++)
+        {
+            yield return new WaitForSeconds(0.1f);
+            CoinManager.instacne.ExitPool(monster.coinPos);
+        }
+    }
 }
 
 
@@ -159,7 +210,17 @@ public class MummyMonster : Monster, IInteractable
     public float Hp
     {
         get { return hp; }
-        set { hp = value; }
+        set 
+        { 
+            hp = value; 
+            if(hp <= 0)
+            {
+                if(mummyState != MummyState.Die)
+                {
+                    ChangeState(MummyState.Die);
+                }
+            }
+        }
     }
 
     private StateMachine<MummyState, MummyMonster> stateMachine = new StateMachine<MummyState, MummyMonster>();
@@ -168,6 +229,7 @@ public class MummyMonster : Monster, IInteractable
     public Projector projector;
     public ParticleSystem skill;
     public float skillDamage;
+    public SkinnedMeshRenderer[] meshRenderer;
 
     private void Awake()
     {
@@ -176,18 +238,28 @@ public class MummyMonster : Monster, IInteractable
         rigid = GetComponent<Rigidbody>();
         stateMachine.Reset(this);
         stateMachine.AddState(MummyState.Idle, new MummyIdle());
+        stateMachine.AddState(MummyState.TakeHit, new MummyTakeHit());
         stateMachine.AddState(MummyState.Attack, new MummyAttack());
         stateMachine.AddState(MummyState.Skill, new MummySkill()); ;
         stateMachine.AddState(MummyState.Die, new MummyDie());
+        ChangeState(MummyState.Idle);
+        maxHp = Hp;
+    }
+
+    private void OnEnable()
+    {
+        Hp = maxHp + (maxHp * StageManager.instance.stageCount);
+        maxHp = Hp;
+        slider.value = Hp / maxHp;
         ChangeState(MummyState.Idle);
     }
 
     private void Start()
     {
-        Hp = 500 + (100 * StageManager.instance.stageCount);
-        maxHp = Hp;
         player = GameManager.instance.player;
+        StartCoroutine(SkillCo());
     }
+
 
     private void Update()
     {
@@ -215,5 +287,18 @@ public class MummyMonster : Monster, IInteractable
     {
         Hp -= damage;
         slider.value = Hp / maxHp;
+        if(Hp > 0)
+        {
+            ChangeState(MummyState.TakeHit);
+        }
+    }
+
+    private IEnumerator SkillCo()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(10f);
+            ChangeState(MummyState.Skill);
+        }
     }
 }

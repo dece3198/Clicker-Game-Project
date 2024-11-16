@@ -45,7 +45,7 @@ public class MonsterManager : MonoBehaviour
     {
         monsterDic[monster.GetComponent<Monster>().monsterType].Push(monster);
         monster.SetActive(false);
-        monster.GetComponent<BasicMonster>().Hp = monster.GetComponent<BasicMonster>().maxHp + (100 * StageManager.instance.stageCount);
         MapManager.instance.curCount++;
+        MapManager.instance.MapCheck();
     }
 }

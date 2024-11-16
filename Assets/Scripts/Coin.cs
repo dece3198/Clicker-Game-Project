@@ -5,18 +5,25 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     private bool isCoin = false;
+    private MeshCollider meshCollider;
+
+    private void Awake()
+    {
+        meshCollider = GetComponent<MeshCollider>();
+    }
 
     private void OnEnable()
     {
         StartCoroutine(CoinCo());
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if(collision.transform.GetComponent<PlayerController>() != null)
+        if(other.GetComponent<PlayerController>() != null)
         {
             if(isCoin)
             {
+                meshCollider.isTrigger = false;
                 isCoin = false;
                 CoinManager.instacne.EnterPool(gameObject);
                 GameManager.instance.gold += 1 + StageManager.instance.stageCount;
@@ -37,5 +44,6 @@ public class Coin : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         isCoin = true;
+        meshCollider.isTrigger = true;
     }
 }

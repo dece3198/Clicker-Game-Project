@@ -48,7 +48,10 @@ public class BasicMonster : Monster,IInteractable
 
     private void OnEnable()
     {
+        Hp = maxHp + (maxHp * StageManager.instance.stageCount);
+        maxHp = Hp;
         slider.value = Hp / maxHp;
+        ChangeState(BasicMonsterState.Idle);
     }
 
     private void Start()

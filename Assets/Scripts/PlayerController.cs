@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.UI;
 
 public abstract class BaseState<T>
@@ -23,130 +24,35 @@ public class PlayerController : MonoBehaviour, IInteractable
     public float moveSpeed;
     public float rotateSpeed;
 
+    public PlayerSkill playerSkill;
+
     private Animator animator;
     [SerializeField] private Camera cam;
     private CharacterController characterController;
     private ViewDetector viewDetector;
-    [SerializeField] private GameObject bullet;
-    [SerializeField] private GameObject explosion;
-    [SerializeField] private Transform bulletPos;
-    [SerializeField] private ParticleSystem bulletParticle;
-    [SerializeField] private GameObject bulletParent;
     [SerializeField] private Slider hpSlider;
-    private Stack<GameObject> bulletStack = new Stack<GameObject>();
     public Transform coinPos;
     
     private Vector3 moveVec;
     public bool isMove;
-    private bool isAtkCool = true;
+
+
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         viewDetector = GetComponent<ViewDetector>();
-        characterController = GetComponent<CharacterController>();  
+        characterController = GetComponent<CharacterController>();
+        playerSkill = GetComponent<PlayerSkill>();
         cam = Camera.main;
         maxHp = Hp;
     }
 
-    private void Start()
-    {
-        for(int i = 0; i < 10; i++)
-        {
-            GameObject _bullet = Instantiate(bullet, bulletParent.transform);
-            GameObject _explosion = Instantiate(explosion, bulletParent.transform);
-            _bullet.GetComponent<BasicBullet>().explosion = _explosion;
-            bulletStack.Push(_bullet);
-        }
-    }
-
-
     private void Update()
     {
-        //PlayerMove();
         animator.SetBool("isMove", isMove);
         hpSlider.value = Hp / maxHp;
-
-
-        viewDetector.FindAutoTarget();
-        if(viewDetector.AutoTarget != null)
-        {
-            if (viewDetector.Target == null)
-            {
-                isMove = true;
-                transform.position = Vector3.MoveTowards(transform.position, viewDetector.AutoTarget.transform.position, moveSpeed * Time.deltaTime);
-                transform.LookAt(viewDetector.AutoTarget.transform);
-                viewDetector.FindTarget();
-            }
-            else
-            {
-                isMove = false;
-                ClickAtkButton();
-            }
-            
-        }
-    }
-
-    public void ClickAtkButton()
-    {
-        if (isAtkCool)
-        {
-            viewDetector.FindTarget();
-            if (viewDetector.Target != null)
-            {
-                StartCoroutine(AtkCo());
-                animator.SetTrigger("AttackA");
-                transform.LookAt(viewDetector.Target.transform.position);
-            }
-        }
-    }
-
-    public void BasicAttack()
-    {
-        viewDetector.FindTarget();
-        if(viewDetector.Target != null)
-        {
-            bulletParticle.Play();
-            GameObject _bullet = bulletStack.Pop();
-            _bullet.GetComponent<BasicBullet>().target = viewDetector.Target;
-            _bullet.transform.position = bulletPos.position;
-            _bullet.gameObject.SetActive(true);
-        }
-    }
-
-    public void EnterBullet(GameObject _bullet)
-    {
-        bulletStack.Push(_bullet);
-    }
-
-    private void PlayerMove()
-    {
-
-        Vector3 moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
-        if (moveInput.magnitude > 0)
-        {
-            isMove = true;
-        }
-        else
-        {
-            isMove = false;
-        }
-
-        if (!isMove)
-        {
-            return;
-        }
-
-        Vector3 forwarVec = new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z);
-        Vector3 RightVec = new Vector3(cam.transform.right.x, 0f, cam.transform.right.z);
-
-        moveVec = moveInput.x * RightVec + moveInput.z * forwarVec;
-        if(isAtkCool)
-        {
-            transform.localRotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveVec), Time.deltaTime * rotateSpeed);
-        }
-        characterController.Move(moveVec * moveSpeed * Time.deltaTime);
+        //Auto();
     }
 
     public void TakeHit(float damage)
@@ -158,11 +64,4 @@ public class PlayerController : MonoBehaviour, IInteractable
     {
     }
 
-
-    private IEnumerator AtkCo()
-    {
-        isAtkCool = false;
-        yield return new WaitForSeconds(0.1f);
-        isAtkCool = true;
-    }
 }

@@ -928,13 +928,19 @@ MonoBehaviour:
   slider: {fileID: 1803654090134928558}
   maxHp: 0
   coinCount: 20
+  power: 5
   monsterType: 4
-  hp: 0
+  hp: 500
   mummyState: 0
   projectorObj: {fileID: 4875186834528384308}
   projector: {fileID: 8082605320468255078}
   skill: {fileID: 8979131834632279533}
   skillDamage: 50
+  meshRenderer:
+  - {fileID: 4628834183096496425}
+  - {fileID: 4628834183096496427}
+  - {fileID: 4628834183096496429}
+  - {fileID: 4628834183096496431}
 --- !u!114 &8710752779386280262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -951,15 +957,38 @@ MonoBehaviour:
   rangeTarget: {fileID: 0}
   atkTarget: {fileID: 0}
   skillTarget: {fileID: 0}
+  autoTarget: {fileID: 0}
   radiu: 10
   angle: 360
   atkRadiu: 1.5
   atkAngle: 120
   skillRadiu: 8.427424
   skillAngle: 360
+  autoRadiu: 0
+  autoAngle: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 128
+--- !u!137 &4628834183096496425 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 13700000, guid: 3353e4f866c39d043a315b41717c9bb7, type: 3}
+  m_PrefabInstance: {fileID: 4628834183093418633}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &4628834183096496427 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 13700002, guid: 3353e4f866c39d043a315b41717c9bb7, type: 3}
+  m_PrefabInstance: {fileID: 4628834183093418633}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &4628834183096496429 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 13700004, guid: 3353e4f866c39d043a315b41717c9bb7, type: 3}
+  m_PrefabInstance: {fileID: 4628834183093418633}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &4628834183096496431 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 13700006, guid: 3353e4f866c39d043a315b41717c9bb7, type: 3}
+  m_PrefabInstance: {fileID: 4628834183093418633}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9105899344802572487
 PrefabInstance:
   m_ObjectHideFlags: 0

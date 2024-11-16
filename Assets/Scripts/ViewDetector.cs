@@ -107,7 +107,7 @@ public class ViewDetector : MonoBehaviour
         atkTarget = null;
     }
 
-    public void FindSkillTarget()
+    public void FindSkillTarget(float damage)
     {
         Collider[] targets = Physics.OverlapSphere(transform.position, skillRadiu, layerMask);
 
@@ -121,6 +121,10 @@ public class ViewDetector : MonoBehaviour
             float findTargetRange = Vector3.Distance(transform.position, targets[i].transform.position);
             Debug.DrawRay(transform.position, findTarget * findTargetRange, Color.red);
 
+            for(int j = 0; j < targets.Length; j++)
+            {
+                targets[j].GetComponent<IInteractable>().TakeHit(damage);
+            }
             skillTarget = targets[i].gameObject;
             return;
         }

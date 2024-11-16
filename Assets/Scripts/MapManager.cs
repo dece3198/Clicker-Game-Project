@@ -10,19 +10,6 @@ public class MapManager : MonoBehaviour
     public int curCount;
     private Vector3 pos = new Vector3(0, 0, 47);
     [SerializeField] private int mapCount;
-    public int MapCount
-    {
-        get { return mapCount; }
-        set 
-        { 
-            mapCount = value; 
-            if(mapCount >= 5)
-            {
-                mapCount = 0;
-                StageManager.instance.stageCount++;
-            }
-        }
-    }
 
     private void Awake()
     {
@@ -43,12 +30,25 @@ public class MapManager : MonoBehaviour
         curMap[0].GetComponent<Map>().CreateMonster();
     }
 
-    private void Update()
+    public void MapCheck()
     {
-        if(curCount == StageManager.instance.stage.stages[StageManager.instance.stageCount].monsterCount)
+        if (curCount >= StageManager.instance.stage.stages[StageManager.instance.stageCount].monsterCount)
         {
             curCount = 0;
-            MapCount++;
+            mapCount++;
+
+            if (StageManager.instance.stage.stages[StageManager.instance.stageCount].stageType == StageType.Boss)
+            {
+                StageManager.instance.stageCount++;
+            }
+
+            if (mapCount >= 5)
+            {
+                mapCount = 0;
+                StageManager.instance.stageCount++;
+            }
+
+
             curMap[1].GetComponent<Map>().CreateMonster();
             curMap[0].GetComponent<Map>().exit.SetActive(false);
             curMap[1].GetComponent<Map>().entrance.SetActive(false);

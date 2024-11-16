@@ -8,7 +8,7 @@ public class BasicBullet : MonoBehaviour
     public GameObject explosion;
     private Rigidbody rigid;
     [SerializeField] private float speed;
-    [SerializeField] private float damage;
+    public float damage;
     [SerializeField] private float power;
     private IEnumerator bulletCo;
     
@@ -23,9 +23,13 @@ public class BasicBullet : MonoBehaviour
         if(target != null)
         {
             transform.LookAt(target.GetComponent<Monster>().headPos.position);
+            bulletCo = BulletCo();
+            StartCoroutine(bulletCo);
         }
-        bulletCo = BulletCo();
-        StartCoroutine(bulletCo);
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void Update()
@@ -44,15 +48,17 @@ public class BasicBullet : MonoBehaviour
             explosion.GetComponent<ParticleSystem>().Play();
             StopCoroutine(bulletCo);
             gameObject.SetActive(false);
-            GameManager.instance.player.EnterBullet(gameObject);
+            GameManager.instance.player.playerSkill.EnterBullet(gameObject);
+            target = null;
         }
     }
 
     private IEnumerator BulletCo()
     {
         yield return new WaitForSeconds(3f);
+        target = null;
         gameObject.SetActive(false);
-        GameManager.instance.player.EnterBullet(gameObject);
+        GameManager.instance.player.playerSkill.EnterBullet(gameObject);
     }
 }
  
