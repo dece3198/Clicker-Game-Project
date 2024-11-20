@@ -4,7 +4,9 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     public static SkillManager instance;
+    private Animator animator;
     [SerializeField] private int skillPoint;
+    [SerializeField] private GameObject skillUi;
     public int SkillPoint
     {
         get { return skillPoint; }
@@ -16,6 +18,8 @@ public class SkillManager : MonoBehaviour
     }
     [SerializeField] private TextMeshProUGUI pointText;
 
+    public Slot[] slots;
+
     public bool isClick = false;
 
     public SkillSlot[] skillSlots5;
@@ -24,14 +28,21 @@ public class SkillManager : MonoBehaviour
 
     public Skill copySkill;
 
-
     private void Awake()
     {
         instance = this;
+        animator = GetComponent<Animator>();
     }
 
     public void XButton()
     {
-        gameObject.SetActive(false);
+        skillUi.SetActive(false);
+        copySkill = null;
+    }
+
+    public void SkillUi()
+    {
+        skillUi.SetActive(true);
+        animator.Play("On");
     }
 }

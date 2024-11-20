@@ -95,14 +95,9 @@ public class SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         switch (slotType)
         {
-            case SlotType.Atk:
-                for (int i = 0; i < GameManager.instance.playerSkill.bulletList.Count; i++)
-                {
-                    GameManager.instance.playerSkill.bulletList[i].damage += 1 * sign;
-                }
-                break;
-            case SlotType.skillA: GameManager.instance.playerSkill.skillA.damage += 25 * sign; break;
-            case SlotType.SkillB: GameManager.instance.playerSkill.skillBDamage += 2.5f * sign ; break;
+            case SlotType.Atk: GameManager.instance.playerSkill.skillADamage += skill.damage * sign; break;
+            case SlotType.skillA: GameManager.instance.playerSkill.skillA.damage += skill.damage * sign; break;
+            case SlotType.SkillB: GameManager.instance.playerSkill.skillCDamage += skill.damage * sign ; break;
         }
     }
 

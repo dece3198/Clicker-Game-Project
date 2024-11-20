@@ -51,8 +51,8 @@ public class PlayerController : MonoBehaviour, IInteractable
     private void Update()
     {
         animator.SetBool("isMove", isMove);
+
         hpSlider.value = Hp / maxHp;
-        //Auto();
     }
 
     public void TakeHit(float damage)

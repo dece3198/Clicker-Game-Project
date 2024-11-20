@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillImage: {fileID: 1722008310, guid: c8e0ed258ce61c544a8a5c4d57b3c4ea, type: 3}
   skillType: 1
-  coolTime: 0
+  damage: 25
+  coolTime: 15

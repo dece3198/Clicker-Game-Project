@@ -8,9 +8,8 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 {
     [SerializeField] private RectTransform backGround;
     [SerializeField] private RectTransform joyStcik;
-    [SerializeField] private GameObject player;
+    [SerializeField] private PlayerController player;
     [SerializeField] private GameObject dragImage;
-    public float moveSpeed;
 
     private float radius;
     private bool isTouch = false;
@@ -26,7 +25,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         if (isTouch)
         {
             player.transform.position += movePosition;
-            player.GetComponent<PlayerController>().isMove = movePosition.magnitude > 0;
+            player.isMove = movePosition.magnitude > 0;
         }
     }
 
@@ -38,7 +37,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
         float distance = Vector2.Distance(backGround.position, joyStcik.position) / radius;
         value = value.normalized;
-        movePosition = new Vector3(value.x * moveSpeed * distance * Time.deltaTime, 0, value.y * moveSpeed  * distance * Time.deltaTime);
+        movePosition = new Vector3(value.x * player.moveSpeed * distance * Time.deltaTime, 0, value.y * player.moveSpeed  * distance * Time.deltaTime);
         if(value.magnitude > 0)
         {
             player.transform.rotation = Quaternion.Euler(0f, Mathf.Atan2(value.x, value.y) * Mathf.Rad2Deg, 0f);
@@ -56,6 +55,6 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         isTouch = false;
         joyStcik.localPosition = Vector3.zero;
         movePosition = Vector3.zero;
-        player.GetComponent<PlayerController>().isMove = movePosition.magnitude > 0;
+        player.isMove = movePosition.magnitude > 0;
     }
 }
