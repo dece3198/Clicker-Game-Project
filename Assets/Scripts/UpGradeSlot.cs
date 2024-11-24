@@ -13,7 +13,6 @@ public class UpGradeSlot : MonoBehaviour
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private UpGradeType upGradeType;
     private int level = 1;
-    [SerializeField] private float value;
     private int gold = 1;
     [SerializeField] private int count = 0;
     [SerializeField] private int maxCount;
@@ -41,22 +40,29 @@ public class UpGradeSlot : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        switch (upGradeType)
+        {
+            case UpGradeType.Atk: valueText.text = GameManager.instance.playerSkill.basicDamage.ToString("N0") + " --> " + (GameManager.instance.playerSkill.basicDamage + 1).ToString("N0"); ; break;
+            case UpGradeType.HP: valueText.text = GameManager.instance.player.Hp.ToString("N0") + " --> " + (GameManager.instance.player.Hp + 1).ToString("N0"); ; break;
+            case UpGradeType.Speed: valueText.text = GameManager.instance.player.moveSpeed.ToString("N1") + " --> " + (GameManager.instance.player.moveSpeed + 0.1f).ToString("N1"); break;
+        }
+    }
+
+
     private void AtkUp()
     {
 
         GameManager.instance.gold -= gold;
 
-        value += 1;
         gold += 1;
         level += 1;
 
-        for (int i = 0; i < GameManager.instance.playerSkill.bulletList.Count; i++)
-        {
-            GameManager.instance.playerSkill.bulletList[i].damage = value;
-        }
+        GameManager.instance.playerSkill.basicDamage += 1;
+
 
         nameText.text = "공격력 증가 (Lv " + level.ToString() + ")";
-        valueText.text = value.ToString("N0") + " --> " + (value + 1).ToString("N0");
         goldText.text = gold.ToString();
     }
 
@@ -64,30 +70,25 @@ public class UpGradeSlot : MonoBehaviour
     {
         GameManager.instance.gold -= gold;
 
-        value += 10;
+        GameManager.instance.player.Hp += 10;
         gold += 1;
         level += 1;
 
-        GameManager.instance.player.Hp = value;
-        GameManager.instance.player.maxHp = value;
+        GameManager.instance.player.maxHp = GameManager.instance.player.Hp;
 
         nameText.text = "체력 증가 (Lv " + level.ToString() + ")";
-        valueText.text = value.ToString("N0") + " --> " + (value + 1).ToString("N0");
         goldText.text = gold.ToString();
     }
 
     private void SpeedUp()
     {
         GameManager.instance.gold -= gold;
-
-        value += 0.1f;
         gold += 1;
         level += 1;
 
-        GameManager.instance.player.moveSpeed = value;
+        GameManager.instance.player.moveSpeed += 0.1f;
 
         nameText.text = "이동속도 증가 (Lv " + level.ToString() + ")";
-        valueText.text = value.ToString("N1") + " --> " + (value + 0.1f).ToString("N1");
         goldText.text = gold.ToString();
     }
 }

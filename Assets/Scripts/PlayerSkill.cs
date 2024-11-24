@@ -38,6 +38,8 @@ public class PlayerSkill : MonoBehaviour
     public List<BasicBullet> bulletList = new List<BasicBullet>();
 
     private Buff buff;
+    public float basicDamage;
+    public float bulletSpeed;
 
     private void Awake()
     {
@@ -161,12 +163,10 @@ public class PlayerSkill : MonoBehaviour
         animator.SetTrigger("SkillA");
         skillAParticle.SetActive(true);
 
-        float damage = bulletList[0].damage;
+        float tempDamage = basicDamage;
+        float damage = (basicDamage * skillADamage);
 
-        for(int i = 0; i < bulletList.Count; i++)
-        {
-            bulletList[i].damage += skillADamage;
-        }
+        basicDamage += damage;
 
         float time = 5;
 
@@ -187,10 +187,9 @@ public class PlayerSkill : MonoBehaviour
             buff.buffText.text = time.ToString("N0") + "ÃÊ";
             yield return null;  
         }
-
         for (int i = 0; i < bulletList.Count; i++)
         {
-            bulletList[i].damage = damage;
+            basicDamage = tempDamage;
         }
         buff.GetComponent<Image>().sprite = null;
         skillAParticle.SetActive(false);
@@ -247,7 +246,8 @@ public class PlayerSkill : MonoBehaviour
             for (int i = 0; i < 5; i++)
             {
                 yield return new WaitForSeconds(0.2f);
-                skillB.GetComponent<ViewDetector>().FindSkillTarget(skillCDamage);
+                float damage = (basicDamage / skillCDamage);
+                skillB.GetComponent<ViewDetector>().FindSkillTarget(damage);
             }
         }
     }

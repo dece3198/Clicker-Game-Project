@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46753e9b244d7cb4faec7428fedcba1f, type: 3}
+  m_Name: RareRing
+  m_EditorClassIdentifier: 
+  itemImage: {fileID: 2089539293, guid: c7ab1696e635a5f46bc17d1b5c2a9907, type: 3}
+  itemType: 1
+  upType: 00000000
+  grade: 1
+  itemName: "\uC120\uC778\uC7A5 \uBC18\uC9C0"
+  upGradeValue:
+  - 25
+  value:
+  - "\uACF5\uACA9\uB825 \uC99D\uAC00 +"

@@ -1,6 +1,5 @@
 using System.Collections;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
@@ -257,7 +256,6 @@ public class MummyMonster : Monster, IInteractable
     private void Start()
     {
         player = GameManager.instance.player;
-        StartCoroutine(SkillCo());
     }
 
 

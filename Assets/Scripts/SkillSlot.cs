@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public enum SlotType
 {
-    Atk, skillA, SkillB
+    SkillA, skillB, SkillC
 }
 
 public enum SkillSlotType
@@ -95,9 +95,9 @@ public class SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         switch (slotType)
         {
-            case SlotType.Atk: GameManager.instance.playerSkill.skillADamage += skill.damage * sign; break;
-            case SlotType.skillA: GameManager.instance.playerSkill.skillA.damage += skill.damage * sign; break;
-            case SlotType.SkillB: GameManager.instance.playerSkill.skillCDamage += skill.damage * sign ; break;
+            case SlotType.SkillA: GameManager.instance.playerSkill.skillADamage += skill.damage * sign; break;
+            case SlotType.skillB: GameManager.instance.playerSkill.skillA.damage += skill.damage * sign; break;
+            case SlotType.SkillC: GameManager.instance.playerSkill.skillCDamage -= skill.damage * sign ; break;
         }
     }
 

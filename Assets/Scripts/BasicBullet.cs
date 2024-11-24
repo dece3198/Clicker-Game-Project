@@ -7,8 +7,6 @@ public class BasicBullet : MonoBehaviour
     public GameObject target;
     public GameObject explosion;
     private Rigidbody rigid;
-    [SerializeField] private float speed;
-    public float damage;
     [SerializeField] private float power;
     private IEnumerator bulletCo;
     
@@ -34,14 +32,14 @@ public class BasicBullet : MonoBehaviour
 
     private void Update()
     {
-        rigid.linearVelocity = transform.forward * speed;
+        rigid.linearVelocity = transform.forward * GameManager.instance.playerSkill.bulletSpeed;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.GetComponent<IInteractable>() != null)
         {
-            other.GetComponent<IInteractable>().TakeHit(damage);
+            other.GetComponent<IInteractable>().TakeHit(GameManager.instance.playerSkill.basicDamage);
             other.GetComponent<Monster>().rigid.AddForce((transform.forward + transform.up) * power, ForceMode.Impulse);
             explosion.SetActive(true);
             explosion.transform.position = transform.position;

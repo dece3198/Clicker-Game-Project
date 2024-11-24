@@ -8,8 +8,8 @@ public class BulletSkill : MonoBehaviour
     private Rigidbody rigid;
     private ViewDetector viewDetector;
     [SerializeField] private float speed;
-    public float damage;
     [SerializeField] private float power;
+    public float damage;
     private IEnumerator bulletCo;
     [SerializeField]private int count = 0;
 
@@ -41,7 +41,9 @@ public class BulletSkill : MonoBehaviour
         {
             if(other.GetComponent<IInteractable>() != null)
             {
-                other.GetComponent<IInteractable>().TakeHit(damage);
+
+                float skillDamage = (GameManager.instance.playerSkill.basicDamage * damage);
+                other.GetComponent<IInteractable>().TakeHit(skillDamage);
                 other.GetComponent<Monster>().rigid.AddForce((transform.forward + transform.up) * power, ForceMode.Impulse);
                 explosion.SetActive(true);
                 explosion.transform.position = transform.position;
