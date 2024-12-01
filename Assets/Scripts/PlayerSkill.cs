@@ -11,41 +11,50 @@ public class PlayerSkill : MonoBehaviour
     private Animator animator;
     [SerializeField] private Animator autoAnimator;
 
+
+    //기본 공격
+    public float basicDamage;
+    public float bulletSpeed;
     [SerializeField] private GameObject bullet;
     [SerializeField] private GameObject explosion;
     [SerializeField] private Transform bulletPos;
-
     [SerializeField] private ParticleSystem bulletParticleA;
     [SerializeField] private ParticleSystem bulletParticleB;
-    [SerializeField] private GameObject skillAParticle;
-
-    [SerializeField] private GameObject bulletParent;
     [SerializeField] private GameObject guuA;
     [SerializeField] private GameObject gunB;
-    public BulletSkill skillA;
-    [SerializeField] private ParticleSystem skillB;
-    public float skillADamage;
-    public float skillCDamage;
-
     [SerializeField] private Image basicAtk;
+    [SerializeField] private GameObject bulletParent;
+
+    //스킬 A
+    [SerializeField] private GameObject skillAParticle;
+    public float skillADamage;
+    private Buff buff;
+
+    //스킬 B
+    public BulletSkill skillB;
+
+    //스킬 C
+    public float skillCDamage;
+    [SerializeField] private ParticleSystem skillC;
+
+    private Stack<GameObject> bulletStack = new Stack<GameObject>();
+    public List<BasicBullet> bulletList = new List<BasicBullet>();
 
     private bool isAtkCool = true;
     private bool isAtuo = false;
     private bool isSkill = true;
     private bool isPlaySkill = true;
 
-    private Stack<GameObject> bulletStack = new Stack<GameObject>();
-    public List<BasicBullet> bulletList = new List<BasicBullet>();
+    [SerializeField] private AudioClip[] audioClips;
+    private AudioSource audioSource;
 
-    private Buff buff;
-    public float basicDamage;
-    public float bulletSpeed;
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
         viewDetector = GetComponent<ViewDetector>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -116,6 +125,7 @@ public class PlayerSkill : MonoBehaviour
         viewDetector.FindTarget();
         if (viewDetector.Target != null)
         {
+            audioSource.PlayOneShot(audioClips[0]);
             bulletParticleA.Play();
             GameObject _bullet = bulletStack.Pop();
             _bullet.GetComponent<BasicBullet>().target = viewDetector.Target;
@@ -208,18 +218,19 @@ public class PlayerSkill : MonoBehaviour
             guuA.transform.Rotate(new Vector3(10, 0, 0));
             yield return null;
         }
-        viewDetector.FindTarget();
         guuA.transform.localEulerAngles = temp;
+        yield return new WaitForSeconds(0.6f);
+        viewDetector.FindTarget();
         if (viewDetector.Target != null)
         {
             transform.LookAt(viewDetector.Target.transform);
         }
-        yield return new WaitForSeconds(0.6f);
-        skillA.transform.position = bulletPos.position;
+        skillB.transform.position = bulletPos.position;
         viewDetector.FindTarget();
-        skillA.target = viewDetector.Target;
-        skillA.gameObject.SetActive(true);
-        skillA.GetComponent<ParticleSystem>().Play();
+        audioSource.PlayOneShot(audioClips[1]);
+        skillB.target = viewDetector.Target;
+        skillB.gameObject.SetActive(true);
+        skillB.GetComponent<ParticleSystem>().Play();
         isSkill = true;
     }
 
@@ -229,25 +240,29 @@ public class PlayerSkill : MonoBehaviour
         animator.SetTrigger("SkillC");
         yield return new WaitForSeconds(0.3f);
         bulletParticleA.Play();
+        audioSource.PlayOneShot(audioClips[2]);
         yield return new WaitForSeconds(0.2f);
         bulletParticleA.Play();
+        audioSource.PlayOneShot(audioClips[2]);
         yield return new WaitForSeconds(0.5f);
         gunB.SetActive(true);
         yield return new WaitForSeconds(0.2f);
         bulletParticleB.Play();
+        audioSource.PlayOneShot(audioClips[2]);
         yield return new WaitForSeconds(0.5f);
         gunB.SetActive(false);
         isSkill = true;
         viewDetector.FindAttackTarget();
         if (viewDetector.AtkTarget != null)
         {
-            skillB.transform.position = viewDetector.AtkTarget.transform.position;
-            skillB.Play();
+            skillC.transform.position = viewDetector.AtkTarget.transform.position;
+            skillC.Play();
             for (int i = 0; i < 5; i++)
             {
                 yield return new WaitForSeconds(0.2f);
                 float damage = (basicDamage / skillCDamage);
-                skillB.GetComponent<ViewDetector>().FindSkillTarget(damage);
+                audioSource.PlayOneShot(audioClips[3]);
+                skillC.GetComponent<ViewDetector>().FindSkillTarget(damage);
             }
         }
     }

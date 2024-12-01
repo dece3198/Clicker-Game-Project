@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public enum BasicMonsterState
 {
@@ -22,6 +21,10 @@ public class BasicMonster : Monster,IInteractable
                 if(basicMonsterState != BasicMonsterState.Die)
                 {
                     ChangeState(BasicMonsterState.Die);
+                    if (audioClips.Length > 0)
+                    {
+                        audioSource.PlayOneShot(audioClips[1]);
+                    }
                 }
             }
         }
@@ -31,12 +34,15 @@ public class BasicMonster : Monster,IInteractable
     private StateMachine<BasicMonsterState, BasicMonster> stateMachine = new StateMachine<BasicMonsterState, BasicMonster>();
     public SkinnedMeshRenderer meshRenderer;
     public ParticleSystem dieParticle;
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip[] audioClips;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         viewDetector = GetComponent<ViewDetector>();
         rigid = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
         stateMachine.Reset(this);
         stateMachine.AddState(BasicMonsterState.Idle, new BasicStates.BasicMonsterIdle());
         stateMachine.AddState(BasicMonsterState.Attack, new BasicStates.BasicMonsterAttack());
@@ -83,10 +89,18 @@ public class BasicMonster : Monster,IInteractable
     public void TakeHit(float damage)
     {
         Hp -= damage;
+        textManager.ExitPool(damage);
         slider.value = Hp / maxHp;
         if (Hp > 0)
         {
-            ChangeState(BasicMonsterState.TakeHit);
+            if(basicMonsterState != BasicMonsterState.Attack)
+            {
+                if(audioClips.Length > 0)
+                {
+                    audioSource.PlayOneShot(audioClips[0]);
+                }
+                ChangeState(BasicMonsterState.TakeHit);
+            }
         }
     }
 }

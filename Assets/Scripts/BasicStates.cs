@@ -31,7 +31,7 @@ namespace BasicStates
                 if ((monster.player.transform.position - monster.transform.position).magnitude > 1)
                 {
                     monster.animator.SetBool("Walk", true);
-                    monster.transform.position = Vector3.MoveTowards(monster.transform.position, monster.player.transform.position, 2 * Time.deltaTime);
+                    monster.transform.position = Vector3.MoveTowards(monster.transform.position, monster.player.transform.position, monster.moveSpeed * Time.deltaTime);
                 }
                 else
                 {

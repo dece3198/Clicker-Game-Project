@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
         }
     }
     [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI powerText;
+    public float combatPower;
     
     private void Awake()
     {
@@ -63,6 +65,8 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         goldText.text = gold.ToString();
+        combatPower = (playerSkill.basicDamage * 2) + player.Hp + 1000;
+        powerText.text = combatPower.ToString("N0");
         if(Input.GetKeyDown(KeyCode.K))
         {
             Level++;

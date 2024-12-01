@@ -11,16 +11,18 @@ public enum MonsterType
 
 public class Monster : MonoBehaviour
 {
+    public float maxHp;
+    public float moveSpeed;
+    public float damage;
+    public float power;
+    public int coinCount;
     public ViewDetector viewDetector;
     public Animator animator;
     public PlayerController player;
     public Transform headPos;
     public Transform coinPos;
     public Rigidbody rigid;
-    public float damage;
     public Slider slider;
-    public float maxHp;
-    public int coinCount;
-    public float power;
     public MonsterType monsterType;
+    public TextManager textManager;
 }
