@@ -44,6 +44,14 @@ public class ItemSlot : MonoBehaviour
             {
                 if (item != null)
                 {
+                    for(int i = 0; i < item.value.Length; i++)
+                    {
+                        switch (item.upType[i])
+                        {
+                            case ItemUpType.Atk : GameManager.instance.playerSkill.basicDamage -= item.upGradeValue[i]; break;
+                        }
+                    }
+
                     InventoryManager.instance.AcquireItem(item);
                     ClearSlot();
                 }

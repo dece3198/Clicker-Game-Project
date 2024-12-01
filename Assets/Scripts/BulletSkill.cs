@@ -51,7 +51,7 @@ public class BulletSkill : MonoBehaviour
                 StopCoroutine(bulletCo);
                 count++;
 
-                viewDetector.FindTarget();
+                viewDetector.FindSkillBTarget(target);
                 if (viewDetector.Target != null)
                 {
                     target = viewDetector.Target;

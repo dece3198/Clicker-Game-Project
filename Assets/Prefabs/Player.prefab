@@ -743,7 +743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d130277553dd4cf4eb0e476a41f9e018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
+  hp: 300
   maxHp: 0
   moveSpeed: 5
   rotateSpeed: 2
@@ -804,7 +804,7 @@ MonoBehaviour:
   autoAngle: 360
   layerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 2304
 --- !u!136 &4773525891507096024
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -879,10 +879,12 @@ MonoBehaviour:
   gunB: {fileID: 3147318983497912324}
   skillA: {fileID: 0}
   skillB: {fileID: 0}
-  skillADamage: 10
-  skillCDamage: 10
+  skillADamage: 0.5
+  skillCDamage: 2
   basicAtk: {fileID: 0}
   bulletList: []
+  basicDamage: 20
+  bulletSpeed: 10
 --- !u!4 &5274086716787333239 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7790177421927552515, guid: 8e1b7866b7e6d37479f549ab070dd7e0, type: 3}

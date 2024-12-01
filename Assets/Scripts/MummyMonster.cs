@@ -35,7 +35,7 @@ public class MummyIdle : BaseState<MummyMonster>
             if ((monster.player.transform.position - monster.transform.position).magnitude > 1.5)
             {
                 monster.animator.SetBool("Walk", true);
-                monster.transform.position = Vector3.MoveTowards(monster.transform.position, monster.player.transform.position, 3 * Time.deltaTime);
+                monster.transform.position = Vector3.MoveTowards(monster.transform.position, monster.player.transform.position, monster.moveSpeed * Time.deltaTime);
             }
             else
             {
@@ -271,7 +271,7 @@ public class MummyMonster : Monster, IInteractable
         if(viewDetector.AtkTarget != null)
         {
             viewDetector.AtkTarget.GetComponent<IInteractable>().TakeHit(damage);
-            viewDetector.AtkTarget.GetComponent<Rigidbody>().AddForce(transform.forward * 5, ForceMode.Impulse);
+            viewDetector.AtkTarget.GetComponent<Rigidbody>().AddForce(transform.forward * power, ForceMode.Impulse);
         }
     }
 
@@ -285,9 +285,13 @@ public class MummyMonster : Monster, IInteractable
     {
         Hp -= damage;
         slider.value = Hp / maxHp;
+        textManager.ExitPool(damage);
         if(Hp > 0)
         {
-            ChangeState(MummyState.TakeHit);
+            if(mummyState != MummyState.Attack)
+            {
+                ChangeState(MummyState.TakeHit);
+            }
         }
     }
 

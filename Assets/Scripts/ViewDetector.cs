@@ -56,6 +56,40 @@ public class ViewDetector : MonoBehaviour
         
     }
 
+    public void FindSkillBTarget(GameObject temp)
+    {
+        Collider[] targets = Physics.OverlapSphere(transform.position, radiu, layerMask);
+        float min = Mathf.Infinity;
+
+        foreach (Collider collider in targets)
+        {
+            Vector3 findTarget = (collider.transform.position - transform.position).normalized;
+            if (Vector3.Dot(transform.forward, findTarget) < Mathf.Cos(angle * 0.5f * Mathf.Deg2Rad))
+            {
+                continue;
+            }
+
+            float distance = Vector3.Distance(transform.position, collider.transform.position);
+
+            Debug.DrawRay(transform.position, findTarget * distance, Color.red);
+
+            if (distance < min)
+            {
+                min = distance;
+                if(temp != collider.gameObject)
+                {
+                    target = collider.gameObject;
+                }
+            }
+        }
+
+        if (targets.Length <= 0)
+        {
+            target = null;
+        }
+
+    }
+
     public void FindAutoTarget()
     {
         Collider[] targets = Physics.OverlapSphere(transform.position, autoRadiu, layerMask);

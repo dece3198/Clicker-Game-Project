@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -39,9 +40,9 @@ public class SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void SKillButton()
     {
-        if(skillType == SkillSlotType.Skill)
+        if (skillType == SkillSlotType.Skill)
         {
-            if(isLock)
+            if (isLock)
             {
                 SkillManager.instance.XButton();
                 SkillManager.instance.copySkill = skill;
@@ -96,7 +97,7 @@ public class SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         switch (slotType)
         {
             case SlotType.SkillA: GameManager.instance.playerSkill.skillADamage += skill.damage * sign; break;
-            case SlotType.skillB: GameManager.instance.playerSkill.skillA.damage += skill.damage * sign; break;
+            case SlotType.skillB: GameManager.instance.playerSkill.skillB.damage += skill.damage * sign; break;
             case SlotType.SkillC: GameManager.instance.playerSkill.skillCDamage -= skill.damage * sign ; break;
         }
     }

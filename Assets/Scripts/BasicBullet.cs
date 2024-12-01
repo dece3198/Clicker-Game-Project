@@ -40,10 +40,19 @@ public class BasicBullet : MonoBehaviour
         if(other.GetComponent<IInteractable>() != null)
         {
             other.GetComponent<IInteractable>().TakeHit(GameManager.instance.playerSkill.basicDamage);
-            other.GetComponent<Monster>().rigid.AddForce((transform.forward + transform.up) * power, ForceMode.Impulse);
+
+            if(other.transform.CompareTag("Boss"))
+            {
+                other.GetComponent<Monster>().rigid.AddForce((transform.forward + transform.up) * power / 2, ForceMode.Impulse);
+            }
+            else
+            {
+                other.GetComponent<Monster>().rigid.AddForce((transform.forward + transform.up) * power, ForceMode.Impulse);
+            }
+
             explosion.SetActive(true);
             explosion.transform.position = transform.position;
-            explosion.GetComponent<ParticleSystem>().Play();
+            explosion.GetComponent<ParticleSystem>().Play(); 
             StopCoroutine(bulletCo);
             gameObject.SetActive(false);
             GameManager.instance.player.playerSkill.EnterBullet(gameObject);
